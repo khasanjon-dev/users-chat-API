@@ -11,7 +11,7 @@ schema_view = get_schema_view(
         title="Users API",
         default_version='v1',
         contact=openapi.Contact(email="khasanjon.dev@gmail.com"),
-        license=openapi.License(name="BSD License"),
+        license=openapi.License(name="MIT License"),
     ),
     public=True,
 )
