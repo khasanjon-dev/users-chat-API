@@ -8,7 +8,7 @@ from root import settings
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Users API",
+        title="Users Chat API",
         default_version='v1',
         contact=openapi.Contact(email="khasanjon.dev@gmail.com"),
         license=openapi.License(name="MIT License"),
