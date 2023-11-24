@@ -11,6 +11,7 @@ django = "^4.2.7"
 python-dotenv = "^1.0.0"
 djangorestframework = "^3.14.0"
 drf-yasg = {extras = ["validation"], version = "^1.21.7"}
+pillow = "^10.1.0"
 
 
 [build-system]
