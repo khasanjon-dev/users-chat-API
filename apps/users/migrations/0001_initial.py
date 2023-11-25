@@ -3,7 +3,7 @@
 import django.contrib.auth.models
 import django.contrib.auth.validators
 from django.db import migrations, models
-import users.utils.upload_images
+import shared.django.upload_images
 
 
 class Migration(migrations.Migration):
@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=254, unique=True)),
                 ('updated_at', models.DateTimeField(auto_now=True, null=True)),
                 ('date_joined', models.DateTimeField(auto_now_add=True)),
-                ('image', models.ImageField(upload_to=users.utils.upload_images.upload_image)),
+                ('image', models.ImageField(upload_to=shared.django.upload_images.upload_image)),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
             ],
