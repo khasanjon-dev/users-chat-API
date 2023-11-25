@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db.models import CharField, DateTimeField, ImageField
 
+from users.utils.upload_images import upload_image
+
 
 class User(AbstractUser):
     last_name = CharField(max_length=150, null=True, blank=True)
@@ -9,7 +11,7 @@ class User(AbstractUser):
     updated_at = DateTimeField(auto_now=True, null=True)
     date_joined = DateTimeField(auto_now_add=True)
     # file
-    image = ImageField(upload_to='users/images/', default='users/images/default.jpg')
+    image = ImageField(upload_to=upload_image)
 
     def __str__(self):
         return self.get_full_name()
