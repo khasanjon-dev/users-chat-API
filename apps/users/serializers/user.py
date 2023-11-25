@@ -17,3 +17,14 @@ class UserModelSerializer(ModelSerializer):
             'date_joined',
             'image'
         )
+
+
+class UpdateModelSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'first_name',
+            'last_name',
+            'bio',
+            'image'
+        )
