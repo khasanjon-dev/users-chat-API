@@ -61,3 +61,5 @@ class UserViewSet(ListModelMixin, GenericViewSet):
         user = User.objects.get(pk=request.user.id)
         serializer = self.get_serializer(user)
         return Response(serializer.data)
+
+    # @action(methods=['post'], detail=False, permission_classes=(IsAuthenticated))
