@@ -1,20 +1,18 @@
 import httpx
 
-from django.core.files.uploadhandler import UploadFileException
-
 url = 'https://telegra.ph/upload'
 
 
-def upload_image(instance, filename):
-    response, success = upload_image_server(instance.image)
-
+def upload_image(image) -> str:
+    response, success = upload_image_server(image)
+    url = 'https://telegra.ph'
     if success:
         return url + response[0]['src']
     else:
-        raise UploadFileException(response)
+        raise 'uploading image error'
 
 
-def upload_image_server(image):
+def upload_image_server(image) -> tuple:
     response = httpx.post(url, files={'file': image})
     if response.status_code == 200:
         return response.json(), True
