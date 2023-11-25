@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin
@@ -39,7 +38,7 @@ class UserViewSet(ListModelMixin, GenericViewSet):
 
         ```
         """
-        user = get_object_or_404(User, pk=request.user.id)
+        user = User.objects.get(pk=request.user.id)
         serializer = self.get_serializer(user)
         return Response(serializer.data)
 
@@ -58,6 +57,6 @@ class UserViewSet(ListModelMixin, GenericViewSet):
         }
         ```
         """
-        user = get_object_or_404(User, pk=request.user.id)
+        user = User.objects.get(pk=request.user.id)
         serializer = self.get_serializer(user)
         return Response(serializer.data)
