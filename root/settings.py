@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -67,7 +67,7 @@ AUTH_USER_MODEL = 'users.User'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR + '/' + 'database.sqlite3',
+        'NAME': BASE_DIR / 'database.sqlite3',
     }
 }
 
@@ -93,12 +93,12 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR + '/' 'static')
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR + '/' + 'media')
+STATIC_URL = 'static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR / 'static')
+MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
+DEFAULT_USER_IMAGE = os.getenv('DEFAULT_USER_IMAGE')
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
