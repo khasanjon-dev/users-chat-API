@@ -15,14 +15,13 @@ class UserViewSet(ListModelMixin, GenericViewSet):
 
     ```
     """
-
     queryset = User.objects.all()
     serializer_class = UserModelSerializer
 
     @action(methods=['post'], detail=False, serializer_class=RegisterModelSerializer)
     def register(self, request):
         """
-        userlarni register qilish uchun
+        user register qilish uchun
 
         ```
         """
@@ -45,7 +44,7 @@ class UserViewSet(ListModelMixin, GenericViewSet):
         return Response(serializer.data)
 
     @action(methods=['put', 'patch'], detail=False, permission_classes=(IsAuthenticated,),
-            serializer_class=UpdateModelSerializer, url_path='update', )
+            serializer_class=UpdateModelSerializer, url_path='update')
     def update_user(self, request):
         """
         user ma'lumotlarini yangilash
