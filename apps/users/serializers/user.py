@@ -6,4 +6,14 @@ from users.models import User
 class UserModelSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = (
+            'last_login',
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'bio',
+            'updated_at',
+            'date_joined',
+            'image'
+        )
