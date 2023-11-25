@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db.models import CharField, DateTimeField, ImageField, EmailField, BooleanField
 
-from users.utils.upload_images import upload_image
+from shared.django.upload_images import upload_image
 
 
 class User(AbstractUser):
