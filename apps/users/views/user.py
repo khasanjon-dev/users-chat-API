@@ -28,6 +28,8 @@ class UserViewSet(ListModelMixin, GenericViewSet):
         """
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        email = serializer.data.get('email')
+        # TODO send email function
         serializer.save()
         return Response(serializer.data, status.HTTP_201_CREATED)
 
