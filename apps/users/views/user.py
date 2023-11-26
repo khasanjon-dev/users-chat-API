@@ -8,6 +8,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from users.models import User
 from users.serializers import UserModelSerializer, RegisterModelSerializer, UpdateModelSerializer
+from users.serializers.user import ChangeUsernameSerializer
 
 
 class UserViewSet(ListModelMixin, GenericViewSet):
@@ -42,7 +43,7 @@ class UserViewSet(ListModelMixin, GenericViewSet):
         serializer = self.get_serializer(user)
         return Response(serializer.data)
 
-    @action(methods=['put'], detail=False, permission_classes=(IsAuthenticated,),
+    @action(methods=['patch'], detail=False, permission_classes=(IsAuthenticated,),
             serializer_class=UpdateModelSerializer, url_path='update')
     def update_user(self, request):
         """
@@ -71,11 +72,29 @@ class UserViewSet(ListModelMixin, GenericViewSet):
             }
             return Response(context, status.HTTP_400_BAD_REQUEST)
 
-    @action(methods=['put'], detail=False, permission_classes=(IsAuthenticated,))
+    @action(methods=['patch'], detail=False, permission_classes=(IsAuthenticated,),
+            serializer_class=ChangeUsernameSerializer, url_path='change-username')
     def change_username(self, request):
         """
         username o'zgartirish
 
         ```
+        {
+            "username": "hello"
+        }
+        ```
         """
-        pass
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
+            with transaction.atomic():
+                user = User.objects.get(pk=request.user.id)
+                user.username = serializer.data['username']
+                user.save()
+                serializer = UserModelSerializer(user)
+                return Response(serializer.data)
+        except Exception as e:
+            context = {
+                'message': str(e)
+            }
+            return Response(context, status.HTTP_400_BAD_REQUEST)
