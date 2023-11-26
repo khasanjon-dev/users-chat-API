@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from shared.django.email import send_email_token
 from users.models import User
 from users.serializers import UserModelSerializer, RegisterModelSerializer, UpdateModelSerializer
 from users.serializers.user import ChangeUsernameSerializer
@@ -30,6 +31,8 @@ class UserViewSet(ListModelMixin, GenericViewSet):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        email = serializer.data.get('email')
+        send_email_token(request, email, 'Register', 'activate-email')
         return Response(serializer.data, status.HTTP_201_CREATED)
 
     @action(methods=['get'], detail=False, permission_classes=(IsAuthenticated,))
