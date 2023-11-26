@@ -21,12 +21,11 @@ def send_email_link(request, email: str, subject: str, message: str, url: str):
         protocol = 'https'
     else:
         protocol = 'http'
-    link = f'{protocol}://{domain}/api/user/{url}/{uid}/{token}/'
+    link = f'{protocol}://{domain}/api/user/activate/{uid}/{token}/'
     context = {
         'user': user,
         'link': link,
-        'subject': subject,
         'message': message
     }
-    message = render_to_string('activate.html', context)
+    message = render_to_string('activation.html', context)
     send_mail(subject, message, from_email, recipient_list)
