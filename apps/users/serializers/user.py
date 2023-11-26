@@ -1,3 +1,5 @@
+from django.contrib.auth.hashers import make_password
+from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer, Serializer, CharField, URLField
 
 from shared.django.upload_images import upload_image
@@ -51,3 +53,18 @@ class UpdateModelSerializer(ModelSerializer):
 
 class ChangeUsernameSerializer(Serializer):
     username = CharField()
+
+
+class ChangePasswordSerializer(Serializer):
+    password = CharField()
+    new_password = CharField()
+
+    def validate(self, attrs):
+        password = attrs.get('password')
+        request = self.context['request']
+        if not User.objects.get(id=request.user.id).check_password(password):
+            message = 'Parol xato!'
+            raise ValidationError(message)
+        new_password = attrs['new_password']
+        attrs['new_password'] = make_password(new_password)
+        return attrs
