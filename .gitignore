@@ -109,3 +109,4 @@ cython_debug/
 .idea/*
 *.sqlite
 *.sqlite3
+database.sqlite3
