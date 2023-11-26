@@ -1,5 +1,4 @@
-from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer, Serializer
+from rest_framework.serializers import ModelSerializer, Serializer, CharField, URLField
 
 from shared.django.upload_images import upload_image
 from users.models import User
@@ -13,7 +12,7 @@ class MainSerializer(Serializer):
 
 
 class UserModelSerializer(ModelSerializer):
-    image = serializers.URLField()
+    image = URLField()
 
     class Meta:
         model = User
@@ -48,3 +47,7 @@ class UpdateModelSerializer(ModelSerializer):
             data['image'] = image_url
         filtered_data = {key: value for key, value in data.items() if value is not None}
         return filtered_data
+
+
+class ChangeUsernameSerializer(Serializer):
+    username = CharField()

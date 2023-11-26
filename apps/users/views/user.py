@@ -71,4 +71,11 @@ class UserViewSet(ListModelMixin, GenericViewSet):
             }
             return Response(context, status.HTTP_400_BAD_REQUEST)
 
-    # @action(methods=['post'], detail=False, permission_classes=(IsAuthenticated))
+    @action(methods=['put'], detail=False, permission_classes=(IsAuthenticated,))
+    def change_username(self, request):
+        """
+        username o'zgartirish
+
+        ```
+        """
+        pass
