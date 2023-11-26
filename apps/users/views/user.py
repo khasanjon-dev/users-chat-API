@@ -8,8 +8,8 @@ from rest_framework.viewsets import GenericViewSet
 
 from shared.django.email import send_email_link
 from users.models import User
-from users.serializers import UserModelSerializer, RegisterModelSerializer, UpdateModelSerializer
-from users.serializers.user import ChangeUsernameSerializer
+from users.serializers import UserModelSerializer, RegisterModelSerializer, UpdateModelSerializer, \
+    ChangeUsernameSerializer, ChangePasswordSerializer
 
 
 class UserViewSet(ListModelMixin, GenericViewSet):
@@ -83,7 +83,7 @@ class UserViewSet(ListModelMixin, GenericViewSet):
             }
             return Response(context, status.HTTP_400_BAD_REQUEST)
 
-    @action(methods=['patch'], detail=False, permission_classes=(IsAuthenticated,),
+    @action(methods=['post'], detail=False, permission_classes=(IsAuthenticated,),
             serializer_class=ChangeUsernameSerializer, url_path='change-username')
     def change_username(self, request):
         """
@@ -98,12 +98,36 @@ class UserViewSet(ListModelMixin, GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         try:
+            user = User.objects.get(pk=request.user.id)
+            user.username = serializer.data['username']
+            user.save()
+            serializer = UserModelSerializer(user)
+            return Response(serializer.data)
+        except Exception as e:
+            context = {
+                'message': str(e)
+            }
+            return Response(context, status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['post'], detail=False, permission_classes=(IsAuthenticated,),
+            serializer_class=ChangePasswordSerializer, url_path='change-password')
+    def change_password(self, request):
+        """
+        password ni o'zgartirish
+
+        ```
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        try:
             with transaction.atomic():
                 user = User.objects.get(pk=request.user.id)
-                user.username = serializer.data['username']
+                user.password = serializer.data.get('new_password')
                 user.save()
-                serializer = UserModelSerializer(user)
-                return Response(serializer.data)
+                context = {
+                    'message': "Parol o'zgartirildi!"
+                }
+                return Response(context)
         except Exception as e:
             context = {
                 'message': str(e)
