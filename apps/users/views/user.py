@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from shared.django.email import send_email_token
+from shared.django.email import send_email_link
 from users.models import User
 from users.serializers import UserModelSerializer, RegisterModelSerializer, UpdateModelSerializer
 from users.serializers.user import ChangeUsernameSerializer
@@ -28,12 +28,20 @@ class UserViewSet(ListModelMixin, GenericViewSet):
 
         ```
         """
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        email = serializer.data.get('email')
-        send_email_token(request, email, 'Register', 'activate-email')
-        return Response(serializer.data, status.HTTP_201_CREATED)
+        try:
+            with transaction.atomic():
+                serializer = self.serializer_class(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                email = serializer.data.get('email')
+                send_email_link(request, email, 'Activate your account',
+                                'here your activation link 👇', 'activate')
+                return Response(serializer.data, status.HTTP_201_CREATED)
+        except Exception as e:
+            context = {
+                'message': str(e)
+            }
+            return Response(context, status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['get'], detail=False, permission_classes=(IsAuthenticated,))
     def about(self, request):
