@@ -6,7 +6,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from shared.django.upload_images import upload_image
 from users.models import User
 from users.serializers import UserModelSerializer, RegisterModelSerializer, UpdateModelSerializer
 
@@ -60,9 +59,6 @@ class UserViewSet(ListModelMixin, GenericViewSet):
         """
         try:
             with transaction.atomic():
-                # if image := request.data.get('image', None):
-                #     image_url = upload_image(image.read())
-                #     request.data['image'] = image_url
                 serializer = self.get_serializer(data=request.data)
                 serializer.is_valid(raise_exception=True)
                 User.objects.filter(pk=request.user.id).update(**serializer.data)
@@ -73,6 +69,6 @@ class UserViewSet(ListModelMixin, GenericViewSet):
             context = {
                 'error': str(e)
             }
-            return Response(context, status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(context, status.HTTP_400_BAD_REQUEST)
 
     # @action(methods=['post'], detail=False, permission_classes=(IsAuthenticated))

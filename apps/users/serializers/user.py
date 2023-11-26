@@ -1,3 +1,4 @@
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer, Serializer
 
 from shared.django.upload_images import upload_image
@@ -12,6 +13,8 @@ class MainSerializer(Serializer):
 
 
 class UserModelSerializer(ModelSerializer):
+    image = serializers.URLField()
+
     class Meta:
         model = User
         fields = (
@@ -39,8 +42,9 @@ class UpdateModelSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        filtered_data = {key: value for key, value in data.items() if value is not None}
-        if image := filtered_data.get('image', None):
+        request = self.context['request']
+        if image := request.data.get('image', None):
             image_url = upload_image(image.read())
-            filtered_data['image'] = image_url
+            data['image'] = image_url
+        filtered_data = {key: value for key, value in data.items() if value is not None}
         return filtered_data

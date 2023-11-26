@@ -61,6 +61,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'root.wsgi.application'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
@@ -93,11 +94,9 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-MEDIA_URL = 'media/'
 STATIC_URL = 'static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR / 'static')
-MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
 DEFAULT_USER_IMAGE = os.getenv('DEFAULT_USER_IMAGE')
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
