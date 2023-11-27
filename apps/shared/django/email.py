@@ -27,5 +27,5 @@ def send_email_link(request, email: str, subject: str, message: str, url: str):
         'link': link,
         'message': message
     }
-    message = render_to_string('activation.html', context)
+    message = render_to_string('activate.html', context)
     send_mail(subject, message, from_email, recipient_list)
