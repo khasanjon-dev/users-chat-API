@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin
@@ -6,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from shared.django.emails import send_email_link
+from shared.django.emails import send_email_link, get_one_time_link_activate
 from shared.django.serializers import NoneSerializer
 from users.models import User
 from users.serializers import UserModelSerializer, RegisterModelSerializer, UpdateModelSerializer, \
@@ -35,8 +36,9 @@ class UserViewSet(ListModelMixin, GenericViewSet):
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
                 email = serializer.data.get('email')
-                send_email_link(request, email, 'Activate your account',
-                                'here your activation link 👇', 'activate')
+                user = get_object_or_404(User, email=email)
+                link = get_one_time_link_activate(request, user, 'activate')
+                send_email_link(user.email, 'Activate email', link)
                 return Response(serializer.data, status.HTTP_201_CREATED)
         except Exception as e:
             context = {
