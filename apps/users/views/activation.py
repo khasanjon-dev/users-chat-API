@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from shared.django.email import send_email_link
+from shared.django.emails import send_email_link
 from shared.token import account_activation_token
 from users.models import User
 from users.serializers import SendEmailLinkSerializer
@@ -40,22 +40,24 @@ class SendEmailLink(APIView):
         }
         ```
         """
-        try:
-            serializer = SendEmailLinkSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            user = get_object_or_404(User, email=serializer.data.get('email'))
-            if user.is_active:
-                context = {
-                    'message': 'Already activate user'
-                }
-                return Response(context)
-            send_email_link(request, user.email, 'Activation link', 'here your activation link', 'activate')
+        serializer = SendEmailLinkSerializer(data=request.data)
+        serializer.is_valid()
+        user = get_object_or_404(User, email=serializer.data.get('email'))
+        if user.is_active:
             context = {
-                'message': 'Successfully send link'
+                'message': 'Already activate user'
             }
             return Response(context)
+
+        try:
+            send_email_link(request, user, 'Activation link', 'activate')
         except Exception as e:
             context = {
                 'message': str(e)
             }
             return Response(context, status.HTTP_400_BAD_REQUEST)
+
+        context = {
+            'message': 'Successfully send link'
+        }
+        return Response(context)
