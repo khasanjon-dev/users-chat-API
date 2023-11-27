@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from shared.django.email import send_email_link
+from shared.django.serializers import NoneSerializer
 from users.models import User
 from users.serializers import UserModelSerializer, RegisterModelSerializer, UpdateModelSerializer, \
     ChangeUsernameSerializer, ChangePasswordSerializer
@@ -133,3 +134,12 @@ class UserViewSet(ListModelMixin, GenericViewSet):
                 'message': str(e)
             }
             return Response(context, status.HTTP_400_BAD_REQUEST)
+
+    @action(methods=['post'], detail=False, permission_classes=(IsAuthenticated,), serializer_class=NoneSerializer)
+    def reset_password_send_link_email(self, request):
+        """
+        password ni qayta tiklash uchun emailga link yuborish
+
+        ```
+        """
+        pass
