@@ -13,7 +13,7 @@ from users.models import User
 from users.serializers import EmailSerializer
 
 
-class ActivateEmail(APIView):
+class ActivateEmailAPIView(APIView):
     @swagger_auto_schema(auto_schema=None)
     def get(self, request, uid: str, token: str):
         try:
@@ -29,7 +29,7 @@ class ActivateEmail(APIView):
         return HttpResponse('Activate link is expired')
 
 
-class SendEmailLink(APIView):
+class SendEmailLinkAPIView(APIView):
     def post(self, request):
         """
         email ga activate link yuborish
@@ -62,3 +62,5 @@ class SendEmailLink(APIView):
             'message': 'Successfully send link'
         }
         return Response(context)
+
+# class ResetPassword
