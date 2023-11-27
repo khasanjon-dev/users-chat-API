@@ -7,10 +7,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from shared.django.emails import send_email_link, get_one_time_link_activate
+from shared.django.emails import send_email_link, get_one_time_link
 from shared.token import account_activation_token
 from users.models import User
-from users.serializers import SendEmailLinkSerializer
+from users.serializers import EmailSerializer
 
 
 class ActivateEmail(APIView):
@@ -40,7 +40,7 @@ class SendEmailLink(APIView):
         }
         ```
         """
-        serializer = SendEmailLinkSerializer(data=request.data)
+        serializer = EmailSerializer(data=request.data)
         serializer.is_valid()
         user = get_object_or_404(User, email=serializer.data.get('email'))
         if user.is_active:
@@ -50,7 +50,7 @@ class SendEmailLink(APIView):
             return Response(context)
 
         try:
-            link = get_one_time_link_activate(request, user, 'activate')
+            link = get_one_time_link(request, user, 'activate')
             send_email_link(user.email, 'Activate Email', link)
         except Exception as e:
             context = {
