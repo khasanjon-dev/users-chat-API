@@ -30,7 +30,7 @@ from shared.token import account_activation_token
 #     send_mail(subject, message, from_email, recipient_list)
 
 
-def get_one_time_link_activate(request, user, url):
+def get_one_time_link(request, user, url):
     uid = urlsafe_base64_encode(force_bytes(str(user.pk)))
     token = account_activation_token.make_token(user)
     current_site = get_current_site(request)
