@@ -14,7 +14,6 @@ schema_view = get_schema_view(
     ),
     public=True,
 )
-
 urlpatterns = [
     path('', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
     path('admin/', admin.site.urls),
