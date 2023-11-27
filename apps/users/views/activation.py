@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from drf_yasg.utils import swagger_auto_schema
@@ -63,4 +63,14 @@ class SendEmailLinkAPIView(APIView):
         }
         return Response(context)
 
-# class ResetPassword
+
+class ResetPasswordAPIView(APIView):
+    def get(self, request, uid: str, token: str):
+        try:
+            pk = force_str(urlsafe_base64_decode(uid))
+            user = User.objects.get(pk=pk)
+        except Exception as e:
+            return HttpResponse(str(e))
+        if account_activation_token.check_token(user, token):
+            return render(request, 'reset-password.html')
+        return HttpResponse('Reset Password link expired')
