@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from shared.django.emails import send_email_link
+from shared.django.emails import send_email_link, get_one_time_link_activate
 from shared.token import account_activation_token
 from users.models import User
 from users.serializers import SendEmailLinkSerializer
@@ -50,7 +50,8 @@ class SendEmailLink(APIView):
             return Response(context)
 
         try:
-            send_email_link(request, user, 'Activation link', 'activate')
+            link = get_one_time_link_activate(request, user, 'activate')
+            send_email_link(user.email, 'Activate Email', link)
         except Exception as e:
             context = {
                 'message': str(e)
