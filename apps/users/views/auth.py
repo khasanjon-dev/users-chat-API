@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import TokenViewBase
 
 class CustomTokenObtainPairView(TokenViewBase):
     """
-    login ya'ni access va refresh token uchun
+    login ya'ni access va refresh token
 
     ```
     Takes a set of user credentials and returns an access and refresh JSON web
