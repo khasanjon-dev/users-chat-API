@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -13,6 +14,7 @@ from users.serializers import SendEmailLinkSerializer
 
 
 class ActivateEmail(APIView):
+    @swagger_auto_schema(auto_schema=None)
     def get(self, request, uid: str, token: str):
         try:
             pk = force_str(urlsafe_base64_decode(uid))
