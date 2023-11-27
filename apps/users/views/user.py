@@ -136,8 +136,7 @@ class UserViewSet(ListModelMixin, GenericViewSet):
             }
             return Response(context, status.HTTP_400_BAD_REQUEST)
 
-    @action(methods=['post'], detail=False, permission_classes=(IsAuthenticated,),
-            serializer_class=EmailSerializer, url_path='reset-password')
+    @action(methods=['post'], detail=False, serializer_class=EmailSerializer, url_path='reset-password')
     def reset_password_send_link_email(self, request):
         """
         password ni qayta tiklash uchun emailga link yuborish
@@ -151,8 +150,8 @@ class UserViewSet(ListModelMixin, GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = get_object_or_404(User, email=serializer.data['email'])
+        link = get_one_time_link(request, user, 'reset-password')
         try:
-            link = get_one_time_link(request, user, 'reset-password')
             send_email_link(user.email, 'Reset Password', link)
             context = {
                 'message': 'Pochtaga parol qayta tiklash linki yuborildi'
@@ -160,6 +159,7 @@ class UserViewSet(ListModelMixin, GenericViewSet):
             return Response(context)
         except Exception as e:
             context = {
-                'message': str(e)
+                'message': str(e),
+                'link': link
             }
             return Response(context, status.HTTP_400_BAD_REQUEST)
