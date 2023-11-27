@@ -7,11 +7,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from shared.django.emails import send_email_link, get_one_time_link_activate
-from shared.django.serializers import NoneSerializer
+from shared.django.emails import send_email_link, get_one_time_link
 from users.models import User
 from users.serializers import UserModelSerializer, RegisterModelSerializer, UpdateModelSerializer, \
-    ChangeUsernameSerializer, ChangePasswordSerializer
+    ChangeUsernameSerializer, ChangePasswordSerializer, EmailSerializer
 
 
 class UserViewSet(ListModelMixin, GenericViewSet):
@@ -26,7 +25,7 @@ class UserViewSet(ListModelMixin, GenericViewSet):
     @action(methods=['post'], detail=False, serializer_class=RegisterModelSerializer)
     def register(self, request):
         """
-        user register qilish uchun
+        user register qilish
 
         ```
         """
@@ -37,7 +36,7 @@ class UserViewSet(ListModelMixin, GenericViewSet):
                 serializer.save()
                 email = serializer.data.get('email')
                 user = get_object_or_404(User, email=email)
-                link = get_one_time_link_activate(request, user, 'activate')
+                link = get_one_time_link(request, user, 'activate')
                 send_email_link(user.email, 'Activate email', link)
                 return Response(serializer.data, status.HTTP_201_CREATED)
         except Exception as e:
@@ -137,11 +136,30 @@ class UserViewSet(ListModelMixin, GenericViewSet):
             }
             return Response(context, status.HTTP_400_BAD_REQUEST)
 
-    @action(methods=['post'], detail=False, permission_classes=(IsAuthenticated,), serializer_class=NoneSerializer)
+    @action(methods=['post'], detail=False, permission_classes=(IsAuthenticated,),
+            serializer_class=EmailSerializer, url_path='reset-password')
     def reset_password_send_link_email(self, request):
         """
         password ni qayta tiklash uchun emailga link yuborish
 
         ```
+        {
+            "email": "devmasters.uz@gmail.com"
+        }
+        ```
         """
-        pass
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = get_object_or_404(User, email=serializer.data['email'])
+        try:
+            link = get_one_time_link(request, user, 'reset-password')
+            send_email_link(user.email, 'Reset Password', link)
+            context = {
+                'message': 'Pochtaga parol qayta tiklash linki yuborildi'
+            }
+            return Response(context)
+        except Exception as e:
+            context = {
+                'message': str(e)
+            }
+            return Response(context, status.HTTP_400_BAD_REQUEST)
