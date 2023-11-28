@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from shared.django.emails import send_email_link, get_one_time_link
-from shared.token import account_activation_token
+from shared.tokens import activate_token, reset_password_token
 from users.models import User
 from users.serializers import EmailSerializer
 
@@ -21,7 +21,7 @@ class ActivateEmailAPIView(APIView):
             user = User.objects.get(pk=pk)
         except Exception as e:
             return HttpResponse(str(e))
-        if account_activation_token.check_token(user, token):
+        if activate_token.check_token(user, token):
             user.is_active = True
             user.save()
             message = 'Successfully activated!'
@@ -50,7 +50,8 @@ class SendEmailLinkAPIView(APIView):
             return Response(context)
 
         try:
-            link = get_one_time_link(request, user, 'activate')
+            token = activate_token.make_token(user)
+            link = get_one_time_link(request, user, 'activate', token)
             send_email_link(user.email, 'Activate Email', link)
         except Exception as e:
             context = {
@@ -71,6 +72,9 @@ class ResetPasswordAPIView(APIView):
             user = User.objects.get(pk=pk)
         except Exception as e:
             return HttpResponse(str(e))
-        if account_activation_token.check_token(user, token):
-            return render(request, 'reset-password.html')
+        if reset_password_token.check_token(user, token):
+            return render(request, 'password/new-password.html')
         return HttpResponse('Reset Password link expired')
+
+    def post(self, request):
+        pass
