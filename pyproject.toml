@@ -15,6 +15,9 @@ pillow = "^10.1.0"
 djangorestframework-simplejwt = {extras = ["crypto"], version = "^5.3.0"}
 httpx = "^0.25.2"
 six = "^1.16.0"
+channels = {extras = ["daphne"], version = "^4.0.0"}
+ujson = "^5.8.0"
+fcm-django = "^2.0.0"
 
 
 [build-system]

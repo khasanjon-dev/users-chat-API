@@ -14,6 +14,7 @@ class User(AbstractUser):
     image = ImageField(upload_to=upload_image, default=DEFAULT_USER_IMAGE)
     username = CharField(max_length=32, unique=True, validators=[username_validator, MinLengthValidator(5)])
     # bool
+    is_online = BooleanField(default=False)
     is_active = BooleanField(default=False)
     # date
     updated_at = DateTimeField(auto_now=True, null=True)
