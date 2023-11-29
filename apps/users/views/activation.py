@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 
 from shared.django.emails import send_email_link, get_one_time_link
 from shared.tokens import activate_token, reset_password_token
+from users.forms import ResetPasswordForm
 from users.models import User
 from users.serializers import EmailSerializer
 
@@ -77,4 +78,10 @@ class ResetPasswordAPIView(APIView):
         return HttpResponse('Reset Password link expired')
 
     def post(self, request):
-        pass
+        form = ResetPasswordForm(request.POST)
+        if form.is_valid():
+            pass
+        # TODO
+        '''
+        chala qoldi to'liq yozish kerak 
+        '''
