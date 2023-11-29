@@ -4,6 +4,8 @@ import ujson
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from django.db.models import Q
+from fcm_django.models import FCMDevice
+from firebase_admin.messaging import Message, Notification
 
 from chats.models import ChatPersonal, BlockList
 from users.models import User
@@ -187,6 +189,7 @@ class ChatConsumer(BaseAsyncJsonWebsocketConsumer):
         elif msg_type == 'read_message':
             message_id = text_data_json['read_message_id']
             await self.update_message_status(message_id)
+
     async def chat_message(self, event):
         if self.from_user.pk == event['to_user_id'] or self.from_user.pk == event['from_user_id']:
             data = {
@@ -200,8 +203,13 @@ class ChatConsumer(BaseAsyncJsonWebsocketConsumer):
                 data['file_id'] = file_id
             await self.send_json(data)
             if self.from_user.pk == event['to_user_id']:
-                pass
-                # TODO
+                await self.send_message_notification(self.from_user.pk, event['message'])
+            return
+
     @database_sync_to_async
     def send_message_notification(self, user_id: int, msg: str):
-        device = FCM
+        device = FCMDevice.objects.filter(user_id=user_id).first()
+        if device:
+            device.send_message(Message(
+                notification=Notification(title='Websocket chatdan xabar', body=msg)
+            ))
