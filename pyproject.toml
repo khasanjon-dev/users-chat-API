@@ -19,6 +19,7 @@ channels = {extras = ["daphne"], version = "^4.0.0"}
 ujson = "^5.8.0"
 fcm-django = "^2.0.0"
 channels-redis = "^4.1.0"
+pyjwt = "^2.8.0"
 
 
 [build-system]

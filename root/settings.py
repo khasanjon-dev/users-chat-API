@@ -18,6 +18,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'fcm_django',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework.authtoken',
     'channels',
 
     # my apps
@@ -64,7 +66,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'root.wsgi.application'
+ASGI_APPLICATION = 'root.asgi.application'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 DATABASES = {
@@ -152,7 +154,6 @@ CHANNEL_LAYERS = {
         # 'BACKEND": "channels.layers.InMemoryChannelLayer'
     }
 }
-
 
 initialize_app()
 
