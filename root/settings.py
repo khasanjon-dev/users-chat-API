@@ -29,7 +29,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'fcm_django',
     'rest_framework',
-    'rest_framework_simplejwt',
+    # 'rest_framework_simplejwt',
     'rest_framework.authtoken',
     'channels',
 
@@ -104,6 +104,9 @@ STATIC_ROOT = os.path.join(BASE_DIR / 'static')
 DEFAULT_USER_IMAGE = os.getenv('DEFAULT_USER_IMAGE')
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
