@@ -18,7 +18,7 @@ class JWTAuthMiddleware:
         close_old_connections()
         try:
             if jwt_token_list := scope.get('query_string'):
-                jwt_token_list = jwt_token_list.decode('uft8')
+                jwt_token_list = jwt_token_list.decode('utf8')
                 jwt_token = str(jwt_token_list).split('auth=')[-1]
                 jwt_payload = self.get_payload(jwt_token)
                 user_credentials = self.get_user_credentials(jwt_payload)
