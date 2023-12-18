@@ -8,10 +8,8 @@ from firebase_admin import initialize_app
 
 load_dotenv()
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
-
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
@@ -74,7 +72,7 @@ AUTH_USER_MODEL = 'users.User'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'database.sqlite3',
+        'NAME': BASE_DIR + '/' + 'database.sqlite3',
     }
 }
 
@@ -102,7 +100,7 @@ USE_I18N = True
 USE_TZ = True
 STATIC_URL = 'static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR / 'static')
+STATIC_ROOT = os.path.join(BASE_DIR + '/' + 'static')
 DEFAULT_USER_IMAGE = os.getenv('DEFAULT_USER_IMAGE')
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
