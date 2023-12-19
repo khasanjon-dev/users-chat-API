@@ -181,10 +181,14 @@ FCM_DJANGO_SETTINGS = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost',
-    'http://chat-app-api.devmasters.uz',
-    'https://chat-app-api.devmasters.uz',
-    'http://localhost:3000'
+    "http://localhost",
+    "http://chat-app-api.devmasters.uz",
+    "https://chat-app-api.devmasters.uz",
+    'http://localhost:3000',
+    "https://localhost:8000",
+    "https://localhost:8080",
+    "https://localhost:3000",
+    "http://localhost:5173",
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
