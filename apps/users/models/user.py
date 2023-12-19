@@ -15,7 +15,7 @@ class User(AbstractUser):
     username = CharField(max_length=32, unique=True, validators=[username_validator, MinLengthValidator(5)])
     # bool
     is_online = BooleanField(default=False)
-    is_active = BooleanField(default=False)
+    is_active = BooleanField(default=True)
     # date
     updated_at = DateTimeField(auto_now=True, null=True)
     date_joined = DateTimeField(auto_now_add=True)
