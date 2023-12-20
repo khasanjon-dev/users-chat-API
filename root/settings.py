@@ -14,13 +14,11 @@ sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
-    'channels',
-    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -34,6 +32,7 @@ INSTALLED_APPS = [
     'rest_framework',
     # 'rest_framework_simplejwt',
     'rest_framework.authtoken',
+    'channels',
 
     # my apps
     'users',
@@ -185,9 +184,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://chat-app-api.devmasters.uz",
     "https://chat-app-api.devmasters.uz",
     'http://localhost:3000',
-    "https://localhost:8000",
-    "https://localhost:8080",
-    "https://localhost:3000",
+    "http://localhost:8000",
+    "http://localhost:8080",
+    "http://localhost:3000",
     "http://localhost:5173",
 ]
 
@@ -211,5 +210,4 @@ CORS_ALLOW_HEADERS = default_headers + (
     'Referer',
     'x-requested-with',
     'origin',
-
 )
