@@ -18,20 +18,22 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # third party apps
     'drf_yasg',
+    'channels',
     'corsheaders',
     'fcm_django',
     'rest_framework',
     # 'rest_framework_simplejwt',
     'rest_framework.authtoken',
-    'channels',
 
     # my apps
     'users',
@@ -149,6 +151,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 BASE_URL = 'http://127.0.0.1:8000/'
 
+# channels settings
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
