@@ -1,7 +1,6 @@
 import os
 import sys
 from datetime import timedelta
-from pathlib import Path
 
 from corsheaders.defaults import default_headers
 from dotenv import load_dotenv
@@ -14,7 +13,7 @@ sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
