@@ -167,3 +167,4 @@ class UserViewSet(ListModelMixin, GenericViewSet):
                 'link': link
             }
             return Response(context, status.HTTP_400_BAD_REQUEST)
+
