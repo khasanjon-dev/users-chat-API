@@ -11,7 +11,7 @@ from chats.ws.routing import websocket_urls
 
 application = ProtocolTypeRouter(
     {
-        # 'http': get_asgi_application(),
+        'http': get_asgi_application(),
         'websocket': JWTAuthMiddlewareStack(
             URLRouter(websocket_urls)
         )
