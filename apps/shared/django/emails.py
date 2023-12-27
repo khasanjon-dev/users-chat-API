@@ -81,7 +81,7 @@ def email_send_message(email, subject, link):
         'base_url': settings.BASE_URL
     }
     html_content = render_to_string('activation.html', context)
-    html_text_content = strip_tags(html_content)
+    # html_text_content = strip_tags(html_content)
     print("Sending mail...")
-    email_response = send_email(subject, html_text_content, email)
+    email_response = send_email(subject, html_content, email)
     print(email_response)

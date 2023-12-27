@@ -69,3 +69,7 @@ class ChangePasswordSerializer(Serializer):
         new_password = attrs['new_password']
         attrs['new_password'] = make_password(new_password)
         return attrs
+
+
+class SendEmailTestSerializer(Serializer):
+    email = CharField()

@@ -12,6 +12,7 @@ from shared.tokens import reset_password_token, activate_token
 from users.models import User
 from users.serializers import UserModelSerializer, RegisterModelSerializer, UpdateModelSerializer, \
     ChangeUsernameSerializer, ChangePasswordSerializer, EmailSerializer
+from users.serializers.user import SendEmailTestSerializer
 
 
 class UserViewSet(ListModelMixin, GenericViewSet):
@@ -167,3 +168,17 @@ class UserViewSet(ListModelMixin, GenericViewSet):
                 'link': link
             }
             return Response(context, status.HTTP_400_BAD_REQUEST)
+
+    @action(['post'], False, 'send-email', serializer_class=SendEmailTestSerializer)
+    def send_email_message_test(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = get_object_or_404(User, email=serializer.data['email'])
+        token = reset_password_token.make_token(user)
+        link = get_one_time_link(request, user, 'reset-password', token)
+        send_email_link(user.email, 'Reset Password', link)
+        context = {
+            'message': 'Pochtaga parol qayta tiklash linki yuborildi',
+            'link': link
+        }
+        return Response(context)
