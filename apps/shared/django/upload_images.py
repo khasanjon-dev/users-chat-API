@@ -1,7 +1,5 @@
 import httpx
 
-url = 'https://telegra.ph/upload'
-
 
 def upload_image(image) -> str:
     response, success = upload_image_server(image)
@@ -13,6 +11,7 @@ def upload_image(image) -> str:
 
 
 def upload_image_server(image) -> tuple:
+    url = 'https://telegra.ph/upload'
     response = httpx.post(url, files={'file': image})
     if response.status_code == 200:
         return response.json(), True
