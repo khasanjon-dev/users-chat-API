@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'fcm_django',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
 
     # my apps
     'users',
@@ -110,7 +111,16 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter',
+        'rest_framework.filters.SearchFilter'
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'shared.rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 4,
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+    'DATE_FORMAT': '%Y-%m-%d %H:%M',
 }
 
 SIMPLE_JWT = {
