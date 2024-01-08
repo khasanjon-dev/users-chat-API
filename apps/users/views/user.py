@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from shared.django.emails import send_email_link, get_one_time_link
-from shared.tokens import reset_password_token, activate_token
+from shared.tokens import reset_password_token
 from users.models import User
 from users.serializers import UserModelSerializer, RegisterModelSerializer, UpdateModelSerializer, \
     ChangeUsernameSerializer, ChangePasswordSerializer, EmailSerializer
@@ -37,10 +37,8 @@ class UserViewSet(ListModelMixin, GenericViewSet):
                 serializer.is_valid(raise_exception=True)
                 serializer.save()
                 email = serializer.data.get('email')
-                user = get_object_or_404(User, email=email)
-                token = activate_token.make_token(user)
-                link = get_one_time_link(request, user, 'activate', token)
-                send_email_link(request, user.email, 'Activate email', 'hello', link)
+                send_email_link(request, email, 'Activation Your Email Address',
+                                'Click the button to confirm your email', 'activate')
                 return Response(serializer.data, status.HTTP_201_CREATED)
         except Exception as e:
             context = {

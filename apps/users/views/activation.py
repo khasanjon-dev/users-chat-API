@@ -15,7 +15,7 @@ from users.serializers import EmailSerializer
 
 
 class ActivateEmailAPIView(APIView):
-    @swagger_auto_schema(auto_schema=None)
+    # @swagger_auto_schema(auto_schema=None)
     def get(self, request, uid: str, token: str):
         try:
             pk = force_str(urlsafe_base64_decode(uid))
