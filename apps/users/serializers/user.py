@@ -73,3 +73,30 @@ class ChangePasswordSerializer(Serializer):
 
 class SendEmailTestSerializer(Serializer):
     email = CharField()
+
+
+class UserChatInfoSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'first_name',
+            'email',
+            'username',
+            'image',
+            'is_online'
+        )
+
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        ref_name = 'chat_user_serializer'
+        model = User
+        fields = (
+            'id',
+            'first_name',
+            'email',
+            'image',
+            'is_online',
+            'date_joined'
+        )
